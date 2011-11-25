@@ -1,0 +1,16 @@
+<module>
+	<rawname>nethcqr</rawname>
+	<name>Call Query Routing</name>
+	<version>0.0.0.1</version>
+	<type>tool</type>
+	<category>Applications</category>
+	<description>cqr cqr cqr cqr</description>
+	<menuitems>
+		<nethcqr>Call Query Routing</nethcqr>
+	</menuitems>
+	<depends>
+	</depends>
+	<changelog>
+                *0.0.0.1* Nethesis: testing some code
+	</changelog>
+</module>

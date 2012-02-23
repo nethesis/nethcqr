@@ -38,13 +38,19 @@ $(document).ready(function(){
 		} else {
 			$('#timeout_destination').remove()
 		}
-
-		//set goto fileds for destinations
+		
+		//set default_destination field
+                num = $('[name=goto99999]').attr('name').replace('goto', '');
+                dest = $('[name=' + $('[name=goto99999]').val() + num + ']').val();
+                $('#default_destination').attr('value',dest);          
+		$('[name=goto99999]').attr("disabled", "disabled");
+                $('[name=goto99999]').attr('name','changed_name');
+		//set goto fields for destinations
 		$('[name^=goto]').each(function(){
 			num = $(this).attr('name').replace('goto', '');
 			dest = $('[name=' + $(this).val() + num + ']').val();
 			$(this).parent().find('input[name="entries[goto][]"]').val(dest);
-			//console.log(num, dest, $(this).parent().find('input[name="entries[goto][]"]').val())
+		//console.log(num, dest, $(this).parent().find('input[name="entries[goto][]"]').val())
 		})
 		
 		//set ret_ivr checkboxes to SOMETHING so that they get sent back

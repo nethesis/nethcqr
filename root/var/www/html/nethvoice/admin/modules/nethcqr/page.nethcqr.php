@@ -1,4 +1,10 @@
 <?php 
+/////////////TEST/////////////////////
+//print_r (nethcqr_destinations());
+
+
+
+///////////END TEST//////////////////
 $get_vars = array(
 	'action' => '',
 	'id_cqr' => '',

@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `nethcqr_details` (
   `db_user` varchar(30) default NULL,
   `db_pass` varchar(90) default NULL,
   `query` varchar(8000) default NULL,
+  `default_destination` varchar(50) default NULL,
   PRIMARY KEY  (`id_cqr`)
 );
 

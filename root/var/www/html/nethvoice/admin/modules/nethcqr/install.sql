@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `nethcqr_details` (
   `use_code` BOOLEAN default FALSE,
   `manual_code` BOOLEAN default FALSE, 
   `code_length` int(2) default 5,
-  `code_retry` int(1) default 3,
+  `code_retries` int(1) default 3,
   `db_type` varchar(30) default 'mysql',
   `db_url` varchar(60) default 'localhost',
   `db_name` varchar(30) default NULL,

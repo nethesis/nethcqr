@@ -165,14 +165,14 @@ function nethcqr_configpageload(){
 ///////////////////Customer code use_code//////////////////////////////////////////////////////////////////////////
 
                 $currentcomponent->addguielem($cc_section,
-                        new gui_checkbox('use_code', $cqr['use_code'], _('Use Code'), _('If checked, extract user code from caller ID. If Manual Code is checked too, client code can be dialed by caller if ID is not recognized')));
+                        new gui_checkbox('use_code', $cqr['use_code'], _('Use Customer Code'), _('If checked, extract customer code from caller ID. If Manual Code is checked too, customer code can be dialed by caller if ID is not recognized. Customer code can be used in CQR query using %CUSTOMERCODE%')));
                 //Custome code manual_code
                 $currentcomponent->addguielem($cc_section,
-                        new gui_checkbox('manual_code', $cqr['manual_code'], _('Manual Code'), _('If checked customer code can be dialed by caller if ID is not recognized')));
+                        new gui_checkbox('manual_code', $cqr['manual_code'], _('Manual Customer Code'), _('If checked customer code can be dialed by caller if ID is not recognized')));
 		//code_length
 		$currentcomponent->addguielem($cc_section,
                 new gui_selectbox('code_length', $currentcomponent->getoptlist('code_length'),
-                $cqr['code_length'], _('Code Length'), _('Length of client code inserted manualy by caller'), false));
+                $cqr['code_length'], _('Customer Code Length'), _('Length of customer code'), false));
 		//code_retries
 		$currentcomponent->addguielem($cc_section,
                 new gui_selectbox('code_retries', $currentcomponent->getoptlist('code_retries'),
@@ -183,22 +183,22 @@ function nethcqr_configpageload(){
                         $currentcomponent->addoptlistitem('cc_db_type', 'mssql', 'MSSQL');
                 $currentcomponent->addguielem($cc_section,
                         new gui_selectbox('cc_db_type', $currentcomponent->getoptlist('cc_db_type'),
-                        $cqr['cc_db_type'], _('Database Type'), _('Select one of supported database type'), false));
+                        $cqr['cc_db_type'], _('Customer Code Db Type'), _('Select one of supported database type for custome code query'), false));
                 //Custome code db_url
                 $currentcomponent->addguielem($cc_section,
-                        new gui_textbox('cc_db_url', stripslashes($cqr['cc_db_url']), _('Database URL'), _('URL of database')));
+                        new gui_textbox('cc_db_url', stripslashes($cqr['cc_db_url']), _('Customer Code Db URL'), _('URL of database for custome code query')));
                 //Custome code db_name
                 $currentcomponent->addguielem($cc_section,
-                        new gui_textbox('cc_db_name', stripslashes($cqr['cc_db_name']), _('Database Name'), _('Name of database')));
+                        new gui_textbox('cc_db_name', stripslashes($cqr['cc_db_name']), _('Customer Code Db Name'), _('Name of database for custome code query')));
                 //Custome code db_user
                 $currentcomponent->addguielem($cc_section,
-                        new gui_textbox('cc_db_user', stripslashes($cqr['cc_db_user']), _('Database Username'), _('Username that will be used accessing database')));
+                        new gui_textbox('cc_db_user', stripslashes($cqr['cc_db_user']), _('Customer Code Db Username'), _('Username that will be used accessing database for custome code query')));
                 //db_pass
                 $currentcomponent->addguielem($cc_section,
-                        new gui_password('cc_db_pass', stripslashes($cqr['cc_db_pass']), _('Database Password'), _('Password for database')));
+                        new gui_password('cc_db_pass', stripslashes($cqr['cc_db_pass']), _('Customer Code Db Password'), _('Password for database for custome code query')));
                 //query
                 $currentcomponent->addguielem($cc_section,
-                        new gui_textarea('cc_query', stripslashes($cqr['cc_query']), _('Query'), _('Query')));
+                        new gui_textarea('cc_query', stripslashes($cqr['cc_query']), _('Customer Code Query'), _('Query for custome code. %CID% will be replaced with caller ID. Example: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = \'%CID%\'')));
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//cqr options
@@ -235,7 +235,7 @@ function nethcqr_configpageload(){
                 new gui_password('db_pass', stripslashes($cqr['db_pass']), _('Database Password'), _('Password for database')));
 	//query
 	$currentcomponent->addguielem($section,
-		new gui_textarea('query', stripslashes($cqr['query']), _('Query'), _('Query')));
+		new gui_textarea('query', stripslashes($cqr['query']), _('Query'), _('Query. %CID% will be replaced with caller ID, %CUSTOMERCODE% with customer code found by Customer code query. Example: SELECT `name` FROM `phonebook` WHERE `customer_code` = \'%CUSTOMERCODE%\'')));
 	//default destination
 	$currentcomponent->addguielem($section,
 		new gui_drawselects('default_destination_drawselect',99999,stripslashes($cqr['default_destination']),_('Default Destination'),$require=true));

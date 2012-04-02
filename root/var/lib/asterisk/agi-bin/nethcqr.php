@@ -131,18 +131,21 @@ function nethcqr_get_manual_customer_code($cqr){
 	$try=1;
 	$pinchr='';
 	$codcli='';
-	$welcome_audio_file = "custom/benvenutocodice";
+	nethcqr_debug(__FUNCTION__);
+	$welcome_audio_file = "custom/nethcqr_cc_req";
 	if ($cqr['code_retries']==0) $infinite = true;
 	else $infinite = false;
 	while($try <= $cqr['code_retries']|| $infinite){
 		# riproduco il messaggio, mi fermo se sento un numero
-        	$pin = $agi->stream_file($welcome_audio_file,'1234567890#');
+//        	$pin = $agi->stream_file($welcome_audio_file,'1234567890#');
+        	$pin = $agi->fastpass_stream_file(&$buf,$welcome_audio_file,'1234567890#');
+		nethcqr_debug($pin);
+		nethcqr_debug($buf);
         	if ($pin['result'] >0)
         		$codcli=chr($pin['result']);
 		# ciclo in attesa di numeri (codcli) fino a che non viene messo # o il numero di caratteri è < $cqr['code_length']
 		while($pinchr != "#" && strlen($codcli) < $cqr['code_length']) {
         		$pin = $agi->wait_for_digit("6000");
-			nethcqr_debug($pin);
 			$pinchr=chr($pin['result']);	
 			nethcqr_debug($pin);
 			if ($pin['code'] != AGIRES_OK || $pin['result'] <= 0 ) { #non funziona dtmf, vado avanti 

@@ -1,0 +1,5 @@
+#!/usr/bin/perl -w
+
+use esmith::Build::CreateLinks qw(:all);
+
+templates2events("/usr/lib/node/proxycti/config/dataprofiles_base.ini", "freepbx-menu-update");

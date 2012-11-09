@@ -330,7 +330,7 @@ function nethcqr_get_entries($id_cqr){
 function nethcqr_goto_destination($destination,$exit=0){
 	global $agi;
 	nethcqr_debug(__FUNCTION__.": goto $destination");
-	$agi->exec_goto($destination);	
+	$agi->exec_go_to($destination);	
 	exit($exit);
 }
 

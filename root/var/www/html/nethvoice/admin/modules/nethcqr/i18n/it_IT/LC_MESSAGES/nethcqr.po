@@ -111,7 +111,7 @@ msgid "Announcement"
 msgstr "Annuncio"
 
 msgid "Greeting to be played on entry to the CQR."
-msgstr "Annuncio che viene riprodotto all'arrivo el CQR"
+msgstr "Annuncio che viene riprodotto all'arrivo del CQR."
 
 msgid "Database Type"
 msgstr "Tipo di database"
@@ -172,3 +172,6 @@ msgstr "CQR: %s / Option: %s"
 
 msgid "Customer Code Resolution"
 msgstr "Risoluzione Codice Cliente"
+
+msgid "Default destination of the call"
+msgstr "Destinazione di default della chiamata"

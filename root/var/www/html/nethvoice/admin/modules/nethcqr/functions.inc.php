@@ -213,7 +213,7 @@ function nethcqr_configpageload(){
 	//add recording to gui
         $currentcomponent->addguielem($section,
                 new gui_selectbox('announcement', $currentcomponent->getoptlist('recordings'),
-                        $cqr['announcement'], _('Announcement'), _('Greeting to be played on entry to the Ivr.'), false));
+                        $cqr['announcement'], _('Announcement'), _('Greeting to be played on entry to the CQR.'), false));
 	//db_type
 	$currentcomponent->addoptlist('db_type', false);
 		$currentcomponent->addoptlistitem('db_type', 'mysql', 'MySQL');
@@ -238,7 +238,7 @@ function nethcqr_configpageload(){
 		new gui_textarea('query', stripslashes($cqr['query']), _('Query'), _('Query. %CID% will be replaced with caller ID, %CUSTOMERCODE% with customer code found by Customer code query. Example: SELECT `name` FROM `phonebook` WHERE `customer_code` = \'%CUSTOMERCODE%\'')));
 	//default destination
 	$currentcomponent->addguielem($section,
-		new gui_drawselects('default_destination_drawselect',99999,stripslashes($cqr['default_destination']),_('Default Destination'),$require=true));
+		new gui_drawselects('default_destination_drawselect',99999,stripslashes($cqr['default_destination']),_('Default Destination'),_('Default destination of the call'),$require=true));
 	$currentcomponent->addguielem($section,
 		new gui_hidden('default_destination', 'dummy'));
 

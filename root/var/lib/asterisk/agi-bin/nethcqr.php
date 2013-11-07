@@ -3,7 +3,7 @@
 define("AGIBIN_DIR", "/var/lib/asterisk/agi-bin");
 define("AMPORTAL_CONF", "/etc/amportal.conf");
 define("TESTING", true);
-$debug=true;
+$debug=false;
 include(AGIBIN_DIR."/phpagi.php");
 
 require_once('DB.php');
@@ -288,8 +288,6 @@ function nethcqr_debug($text) {
     global $debug;
     if ($debug)
         $agi->verbose($text);
-    if (TESTING)
-	echo "$text\n";
 }
 
 function nethcqr_evaluate($msg,$vars=false){

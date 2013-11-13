@@ -1,7 +1,7 @@
 <module>
 	<rawname>nethcqr</rawname>
 	<name>Call Query Routing</name>
-	<version>0.0.0.1</version>
+	<version>0.0.0.2</version>
 	<type>tool</type>
 	<category>Applications</category>
 	<description>cqr cqr cqr cqr</description>
@@ -11,6 +11,7 @@
 	<depends>
 	</depends>
 	<changelog>
+		*0.0.0.2* Nethesis: fix manual code. Added some audio files.
                 *0.0.0.1* Nethesis: testing some code
 	</changelog>
 </module>

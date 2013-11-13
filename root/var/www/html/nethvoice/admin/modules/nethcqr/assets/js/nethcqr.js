@@ -128,3 +128,15 @@ function timeout_elements() {
 			break;
 	}
 }
+
+//hide/show client code announce and client code error announce checking manual code checkbox state
+$("#manual_code").live('change',function () {
+    if(this.checked) {
+        $("#cod_cli_announcement").parent().parent().show();
+        $("#err_announcement").parent().parent().show();
+    } else {
+        $("#cod_cli_announcement").parent().parent().hide();
+        $("#err_announcement").parent().parent().hide();
+    }
+});
+

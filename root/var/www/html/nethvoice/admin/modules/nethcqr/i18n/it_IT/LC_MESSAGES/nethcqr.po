@@ -44,8 +44,8 @@ msgstr "Descrizione di questo CQR"
 msgid "Use Customer Code"
 msgstr "Usa Codice Cliente"
 
-msgid "If checked, extract customer code from caller ID. If Manual Code is checked too, customer code can be dialed by caller if ID is not recognized. Customer code can be used in CQR query using %%CUSTOMERCODE%%"
-msgstr "Se selezionato, estrae il codice cliente con la query specificata sotto o richiede che venga inserito manualmente. Il codice cliente potrà essere utilizato nella query del CQR con %%CUSTOMERCODE%%"
+msgid "If checked, extract customer code from caller ID. If Manual Code is checked too, customer code can be dialed by caller if ID is not recognized. Customer code can be used in CQR query using %CUSTOMERCODE%"
+msgstr "Se selezionato, estrae il codice cliente con la query specificata sotto o richiede che venga inserito manualmente. Il codice cliente potrà essere utilizato nella query del CQR con %CUSTOMERCODE%"
 
 msgid "Manual Customer Code"
 msgstr "Codice Cliente Manuale"
@@ -98,8 +98,8 @@ msgstr "Password per il database del codice cliente"
 msgid "Customer Code Query"
 msgstr "Query codice cliente"
 
-msgid "Query for custome code. %%CID%% will be replaced with caller ID. Example: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = '%%CID%%'"
-msgstr "Query per estrarre il codice cliente. Si può utilizzare la variabile %%CID%% che verrà sostituita con l'ID del chiamante. Esempio: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = '%%CID%%'"
+msgid "Query for custome code. %CID% will be replaced with caller ID. Example: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = '%CID%'"
+msgstr "Query per estrarre il codice cliente. Si può utilizzare la variabile %CID% che verrà sostituita con l'ID del chiamante. Esempio: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = '%CID%'"
 
 msgid "CQR Options"
 msgstr "Opzioni CQR"
@@ -146,8 +146,8 @@ msgstr "Password che sarà usata per accedere al database"
 msgid "Query"
 msgstr ""
 
-msgid "Query. %%CID%% will be replaced with caller ID, %%CUSTOMERCODE%% with customer code found by Customer code query. Example: SELECT `name` FROM `phonebook` WHERE `customer_code` = '%%CUSTOMERCODE%%'"
-msgstr "Query. %%CID%% sarà sostituito con l'ID chiamante, %%CUSTOMERCODE%% con il codice cliente. Esempio: SELECT `name` FROM `phonebook` WHERE `customer_code` = '%%CUSTOMERCODE%%'"
+msgid "Query. %CID% will be replaced with caller ID, %CUSTOMERCODE% with customer code found by Customer code query. Example: SELECT `name` FROM `phonebook` WHERE `customer_code` = '%CUSTOMERCODE%'"
+msgstr "Query. %CID% sarà sostituito con l'ID chiamante, %CUSTOMERCODE% con il codice cliente. Esempio: SELECT `name` FROM `phonebook` WHERE `customer_code` = '%CUSTOMERCODE%'"
 
 msgid "Default Destination"
 msgstr "Destinazione di default"
@@ -175,3 +175,16 @@ msgstr "Risoluzione Codice Cliente"
 
 msgid "Default destination of the call"
 msgstr "Destinazione di default della chiamata"
+
+msgid "Announcement Customer Code"
+msgstr "Annuncio Codice Cliente"
+
+msgid "Greeting to be played to ask Customer Code."
+msgstr "Annuncio che viene riprodotto per chiedere l'inserimento del Codice Cliente."
+
+msgid "Announcement Customer Code Error"
+msgstr "Annuncio Errore Codice Cliente"
+
+msgid "Greeting to be played when an error occur typing Customer Code."
+msgstr "Annuncio che viene riprodotto quando avviene un errore nell'inserimento del Codice Cliente."
+

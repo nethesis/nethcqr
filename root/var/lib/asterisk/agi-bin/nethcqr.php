@@ -3,7 +3,7 @@
 define("AGIBIN_DIR", "/var/lib/asterisk/agi-bin");
 define("AMPORTAL_CONF", "/etc/amportal.conf");
 define("TESTING", true);
-$debug=false;
+$debug=true;
 include(AGIBIN_DIR."/phpagi.php");
 
 require_once('DB.php');
@@ -132,12 +132,11 @@ function nethcqr_get_manual_customer_code($cqr){
 	$pinchr='';
 	$codcli='';
 	nethcqr_debug(__FUNCTION__);
-	$welcome_audio_file = "custom/nethcqr_cc_req";
+	//$welcome_audio_file = "custom/chiusura";
+        $welcome_audio_file = recordings_get_file($cqr["cod_cli_announcement"]);
 	if ($cqr['code_retries']==0) $infinite = true;
 	else $infinite = false;
 	while($try <= $cqr['code_retries']|| $infinite){
-		# riproduco il messaggio, mi fermo se sento un numero
-//        	$pin = $agi->stream_file($welcome_audio_file,'1234567890#');
         	$pin = $agi->fastpass_stream_file(&$buf,$welcome_audio_file,'1234567890#');
 		nethcqr_debug($pin);
 		nethcqr_debug($buf);
@@ -157,7 +156,11 @@ function nethcqr_get_manual_customer_code($cqr){
         	nethcqr_debug("Codcli: ".$pin['result']."-".$pin['code']."-".$codcli,1);
         	}
 	if (nethcqr_check_customer_code($codcli)) return $codcli;
-	else $agi->stream_file("custom/cod_errato");
+	else { 
+               //$agi->stream_file("custom/cod_errato");
+               $err_msg = recordings_get_file($cqr["err_announcement"]);
+               $agi->stream_file("custom/".$err_msg); # codice errato o inesistente
+             }
         $try++;
 	}
     return false;
@@ -251,8 +254,9 @@ function nethcqr_codcli($tries=3) { //OBSOLETE
     $codcli='';
     while($try <= $tries) {
     # riproduco il messaggio, mi fermo se sento un numero
-	nethcqr_debug("0asdasd");
-        $pin=$agi->stream_file("custom/benvenutocodice",'1234567890#');
+    $cod_cli_msg = recordings_get_file($cqr["cod_cli__announcement"]);
+//        $pin=$agi->stream_file("custom/benvenutocodice",'1234567890#');
+        $pin=$agi->stream_file("custom/".$cod_cli_msg,'1234567890#');
 	nethcqr_debug("1");
         if ($pin['result'] >0)
                 $codcli=chr($pin['result']);
@@ -271,7 +275,9 @@ function nethcqr_codcli($tries=3) { //OBSOLETE
 
         $cliente = check_pin($codcli);
         if ($cliente == "") { # codice inserito, ma inesistente
-            $agi->stream_file("custom/cod_errato"); # codice errato o inesistente
+            $err_msg = recordings_get_file($cqr["err_announcement"]);
+//            $agi->stream_file("custom/cod_errato"); # codice errato o inesistente
+            $agi->stream_file("custom/".$err_msg); # codice errato o inesistente
             $pin=0;
             $pinchr='';
             $codcli='';

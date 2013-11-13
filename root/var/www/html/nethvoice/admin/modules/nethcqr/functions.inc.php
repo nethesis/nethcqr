@@ -27,6 +27,7 @@ function nethcqr_get_config($engine){
 					$ext->add('nethcqr',$cqr['id_cqr'],'', new ext_hangup());
 					//$ext->add('nethcqr','s', new ext_hangup());
                          //           $ext->addHint('nethcqr',$cqr['id_cqr'], 'Custom:NETHCQR100'.$cqr['id_cqr'] );
+                 
                                 }
                         }
 //                        $ext->addInclude('from-internal-additional', 'nethcqr'); // Add the include from from-internal
@@ -56,8 +57,8 @@ function nethcqr_configprocess(){
                 global $db;
                 //get variables
                 $get_var = array('id_cqr', 'name', 'announcement', 'description', 'use_code',
-                                                'manual_code', 'code_length', 'code_retries','default_destination',
-                                                'db_type','db_url','db_name', 'db_user', 'db_pass','query',
+                                                'manual_code', 'cod_cli_announcement', 'err_announcement', 'code_length', 'code_retries',
+                                                'default_destination', 'db_type','db_url','db_name', 'db_user', 'db_pass','query',
                                                 'cc_db_type','cc_db_url','cc_db_name', 'cc_db_user', 'cc_db_pass','cc_query');
                 foreach($get_var as $var){
                         $vars[$var] = isset($_REQUEST[$var])    ? $_REQUEST[$var]               : '';
@@ -91,7 +92,8 @@ function nethcqr_configpageload(){
 	if ($action  == 'add') {
 		$currentcomponent->addguielem('_top', new gui_pageheading('title', _('Add CQR')), 0); //Titolo pagina
 		$deet = array('id_cqr', 'name', 'announcement', 'description', 'use_code',
-       	                                         'manual_code', 'code_length', 'code_retries','default_destination',
+       	                                        'manual_code', 'cod_cli_announcement', 'err_announcement', 
+                                                'code_length', 'code_retries','default_destination',
        	                                        'db_type','db_url','db_name', 'db_user', 'db_pass','query',
 						'cc_db_type','cc_db_url','cc_db_name', 'cc_db_user', 'cc_db_pass','cc_query');
 		//setta le variabili di default del nuovo cqr
@@ -110,6 +112,12 @@ function nethcqr_configpageload(){
 				case 'manual_code': 
 					$cqr[$d] = 1;
        	                         	break;
+				case 'cod_cli_announcement':
+                                        $cqr[$d] = 0;
+                                        break;
+				case 'err_announcement':
+                                        $cqr[$d] = 0;
+                                        break;
 				case 'code_length': 
 					$cqr[$d] = 5;
        	                         	break;
@@ -169,6 +177,20 @@ function nethcqr_configpageload(){
                 //Custome code manual_code
                 $currentcomponent->addguielem($cc_section,
                         new gui_checkbox('manual_code', $cqr['manual_code'], _('Manual Customer Code'), _('If checked customer code can be dialed by caller if ID is not recognized')));
+	        //add recording to ask customer cod
+                $currentcomponent->addoptlistitem('recordings', '', _('None'));
+                foreach(recordings_list() as $r)
+                        $currentcomponent->addoptlistitem('recordings', $r['id'], $r['displayname']);
+
+                $currentcomponent->setoptlistopts('recordings', 'sort', false);
+
+                $currentcomponent->addguielem($cc_section,
+                new gui_selectbox('cod_cli_announcement', $currentcomponent->getoptlist('recordings'),
+                $cqr['cod_cli_announcement'], _('Announcement Customer Code'), _('Greeting to be played to ask Customer Code.'), false));
+	        //add recording for error typing customer code
+                $currentcomponent->addguielem($cc_section,
+                new gui_selectbox('err_announcement', $currentcomponent->getoptlist('recordings'),
+                $cqr['err_announcement'], _('Announcement Customer Code Error'), _('Greeting to be played when an error occur typing Customer Code.'), false));
 		//code_length
 		$currentcomponent->addguielem($cc_section,
                 new gui_selectbox('code_length', $currentcomponent->getoptlist('code_length'),
@@ -205,11 +227,11 @@ function nethcqr_configpageload(){
 	$section = _('CQR Options');
 
 	//build recordings select list
-        $currentcomponent->addoptlistitem('recordings', '', _('None'));
-        foreach(recordings_list() as $r)
-                $currentcomponent->addoptlistitem('recordings', $r['id'], $r['displayname']);
+//        $currentcomponent->addoptlistitem('recordings', '', _('None'));
+ //       foreach(recordings_list() as $r)
+   //             $currentcomponent->addoptlistitem('recordings', $r['id'], $r['displayname']);
 
-	$currentcomponent->setoptlistopts('recordings', 'sort', false);
+//	$currentcomponent->setoptlistopts('recordings', 'sort', false);
 	//add recording to gui
         $currentcomponent->addguielem($section,
                 new gui_selectbox('announcement', $currentcomponent->getoptlist('recordings'),
@@ -342,6 +364,8 @@ function nethcqr_save_details($vals){
         $announcement=(int)$vals['announcement'];
 	$use_code = ($vals['use_code']==='on') ? 1 : 0;
 	$manual_code = ($vals['manual_code']==='on') ? 1 : 0;
+        $cod_cli_announcement=(int)$vals['cod_cli_announcement'];
+        $err_announcement=(int)$vals['err_announcement'];
         $code_length=(int)$vals['code_length'];
         $code_retries=(int)$vals['code_retries'];
 	$default_destination=$vals['default_destination'];
@@ -358,7 +382,7 @@ function nethcqr_save_details($vals){
         $cc_db_pass=$vals['cc_db_pass'];
         $cc_query=$vals['cc_query'];
         if ($vals['id_cqr']) {
-		$sql = "UPDATE `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `manual_code`=$manual_code, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query' WHERE `id_cqr` = $id_cqr";
+		$sql = "UPDATE `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `manual_code`=$manual_code, `cod_cli_announcement`=$cod_cli_announcement, `err_announcement`=$err_announcement, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query' WHERE `id_cqr` = $id_cqr";
                 $foo = $db->query($sql);
                 if($db->IsError($foo)) {
                         die_freepbx(print_r($vals,true).' '.$foo->getDebugInfo());

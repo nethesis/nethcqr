@@ -223,7 +223,7 @@ function nethcqr_configpageload(){
                 $cqr['code_retries'], _('Code Retry'), _('Number of time code can be redialed'), false));
                 //query customer code check 
                 $currentcomponent->addguielem($cc_section,
-                new gui_textarea('ccc_query', stripslashes($cqr['ccc_query']), _('Customer Code Check Query'), _('Query for custome code checking. %CID% will be replaced with caller ID. Example: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = \'%CID%\'')));
+                new gui_textarea('ccc_query', stripslashes($cqr['ccc_query']), _('Customer Code Check Query'), _('Query for custome code checking. %CODCLI% will be replaced with the custome code. Example: SELECT `customer_code` FROM `phonebook` WHERE `customer_code` = \'%CODCLI%\'')));
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//cqr options

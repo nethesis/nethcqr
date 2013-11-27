@@ -190,3 +190,7 @@ msgstr "Annuncio che viene riprodotto quando avviene un errore nell'inserimento 
 
 msgid "Customer Code Check Query"
 msgstr "Query Controllo Codice Cliente"
+
+msgid "Query for custome code checking. %CODCLI% will be replaced with the custome code. Example: SELECT `customer_code` FROM `phonebook` WHERE `customer_code` = '%CODCLI%'"
+msgstr "Query per controllare che il codice cliente inserito sia corretto. %CODCLI% verrà sostituito con il codice cliente immesso. Esempio: SELECT `customer_code` FROM `phonebook` WHERE `customer_code` = '%CODCLI%'"
+

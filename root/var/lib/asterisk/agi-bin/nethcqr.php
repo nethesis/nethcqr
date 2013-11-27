@@ -111,6 +111,7 @@ function nethcqr_get_customer_code($cqr,$cid){
  			//try to find customer code
 			$cqr['cc_query'] = nethcqr_evaluate($cqr['cc_query']);
 			$customer_code = $cc_db->getOne($cqr['cc_query']);
+			mysql_close($cc_db);
 			if ($cc_db->isError($customer_code)){
         	        	nethcqr_debug(__FUNCTION__." error: ".$customer_code->getMessage());
 				$customer_code = 0;
@@ -126,17 +127,18 @@ function nethcqr_get_customer_code($cqr,$cid){
 }
 
 function nethcqr_get_manual_customer_code($cqr){
-	//TODO
 	global $agi;
 	$try=1;
-	$pinchr='';
-	$codcli='';
 	nethcqr_debug(__FUNCTION__);
-	//$welcome_audio_file = "custom/chiusura";
         $welcome_audio_file = recordings_get_file($cqr["cod_cli_announcement"]);
 	if ($cqr['code_retries']==0) $infinite = true;
 	else $infinite = false;
 	while($try <= $cqr['code_retries']|| $infinite){
+		unset($buf);
+		$pinchr='';
+		$codcli='';
+		unset($pin);
+		nethcqr_debug("nethcqr_get_manual_customer_code try: $try");
         	$pin = $agi->fastpass_stream_file(&$buf,$welcome_audio_file,'1234567890#');
 		nethcqr_debug($pin);
 		nethcqr_debug($buf);
@@ -155,38 +157,27 @@ function nethcqr_get_manual_customer_code($cqr){
             		}
         	nethcqr_debug("Codcli: ".$pin['result']."-".$pin['code']."-".$codcli,1);
         	}
-	if (nethcqr_check_customer_code($codcli)) return $codcli;
+	if (nethcqr_check_customer_code($cqr,$codcli)) return $codcli;
 	else { 
-               //$agi->stream_file("custom/cod_errato");
                $err_msg = recordings_get_file($cqr["err_announcement"]);
-               $agi->stream_file("custom/".$err_msg); # codice errato o inesistente
+               $agi->stream_file($err_msg); # codice errato o inesistente
              }
         $try++;
 	}
     return false;
 }
 
-function nethcqr_check_customer_code($codcli){
-	//TODO
-	return true;
-}
-
-function get_id($tstamp=0,$tn=0) {
-//TODO
-/*    global $db_ot;
-    if ($tstamp==0)
-         $query = "Select max(id) from ticket";
-    else
-         $query = "Select id from ticket where create_time_unix=$tstamp and tn='$tn'";
-    nethcqr_debug("$query $tstamp $tn",1);
-    $row = $db_ot->getAll($query);
-    if (count($row) == 1) {
-        $ticket_id = $row[0][0];
-    } else {
-        nethcqr_debug("Impossibile ottenere crmid",1);
-        exit(0);
-    }
-    return $ticket_id;*/
+function nethcqr_check_customer_code($cqr,$codcli){
+	$cc_datasource = $cqr['cc_db_type'].'://'.$cqr['cc_db_user'].':'.$cqr['cc_db_pass'].'@'.$cqr['cc_db_url'].'/'.$cqr['cc_db_name'];
+	$cc_db =& DB::connect($cc_datasource);
+      	nethcqr_debug(__FUNCTION__);
+	$cqr['ccc_query'] = nethcqr_evaluate($cqr['ccc_query'],array("CODCLI"=>$codcli));
+	$ccc = $cc_db->getOne($cqr['ccc_query']);
+      	nethcqr_debug("Codcli: ".print_r($ccc,true));
+	if (count($ccc)>0) 
+		return true;
+	else
+		return false;
 }
 
 function nethcqr_get_details($id_cqr=false){
@@ -201,31 +192,6 @@ function nethcqr_get_details($id_cqr=false){
         }
 	nethcqr_debug(__FUNCTION__.': '.print_r($results[0],true));
         return $results[0];
-}
-
-function check_pin($codcli) {
-//TODO
-/*    global $db_ot;
-    $query = "Select name,city from customer_company WHERE customer_id=$codcli";
-    nethcqr_debug("$query",1);
-    $row = $db_ot->getAll($query);
-    if (count($row) > 0) {
-        return $row[0][0]." (".$row[0][1].")";
-    } else {
-        return "";
-    }*/
-}
-
-function check_tel($number) {
-//TODO
-/*    global $db_ot;
-    $query = "Select customer_id from customer_custom WHERE value='$number' limit 1";
-    $cidresult=$db_ot->getAll($query);
-    if (count($cidresult) > 0) {
-        return $cidresult[0][0];
-    } else {
-        return 0;
-    }*/
 }
 
 function nethcqr_menu($file,$options,$tries=3) {
@@ -245,48 +211,6 @@ function nethcqr_menu($file,$options,$tries=3) {
              return $choice;
      else
              return -1;
-}
-
-function nethcqr_codcli($tries=3) { //OBSOLETE
-    global $agi;
-    $try=1;
-    $pinchr='';
-    $codcli='';
-    while($try <= $tries) {
-    # riproduco il messaggio, mi fermo se sento un numero
-    $cod_cli_msg = recordings_get_file($cqr["cod_cli__announcement"]);
-//        $pin=$agi->stream_file("custom/benvenutocodice",'1234567890#');
-        $pin=$agi->stream_file("custom/".$cod_cli_msg,'1234567890#');
-	nethcqr_debug("1");
-        if ($pin['result'] >0)
-                $codcli=chr($pin['result']);
-    # ciclo in attesa di numeri (codcli) fino a che non viene messo #
-        while($pinchr != "#") {
-		nethcqr_debug("2");
-            $pin = $agi->wait_for_digit("6000");
-            $pinchr=chr($pin['result']);
-            if ($pin['code'] != AGIRES_OK || $pin['result'] <= 0 ) { #non funziona dtmf, vado avanti 
-                 return false;
-            } elseif ($pinchr >= "0" and $pinchr <= "9") {
-                $codcli = $codcli.$pinchr;
-            }
-	nethcqr_debug("Codcli: ".$pin['result']."-".$pin['code']."-".$codcli,1);
-        }
-
-        $cliente = check_pin($codcli);
-        if ($cliente == "") { # codice inserito, ma inesistente
-            $err_msg = recordings_get_file($cqr["err_announcement"]);
-//            $agi->stream_file("custom/cod_errato"); # codice errato o inesistente
-            $agi->stream_file("custom/".$err_msg); # codice errato o inesistente
-            $pin=0;
-            $pinchr='';
-            $codcli='';
-        } else {
-            return $codcli; # codcli OK, esco
-        }
-        $try++;
-    }
-    return false;
 }
 
 function nethcqr_debug($text) {
@@ -338,7 +262,21 @@ function nethcqr_goto_destination($destination,$exit=0){
 	exit($exit);
 }
 
+function recordings_get($id) {
+	global $asterisk_db;
+        $sql = "SELECT * FROM recordings where id='$id'";
+        $results = $asterisk_db->getRow($sql, DB_FETCHMODE_ASSOC);
+        if(DB::IsError($results)) {
+                $results = null;
+        }
+        return $results;
+}
 
-
-
+function recordings_get_file($id) {
+        $res = recordings_get($id);
+        if (empty($res)) {
+                return '';
+        }
+        return $res['filename'];
+}
 

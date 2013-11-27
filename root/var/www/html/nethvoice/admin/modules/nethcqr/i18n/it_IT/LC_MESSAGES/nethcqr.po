@@ -48,7 +48,7 @@ msgid "If checked, extract customer code from caller ID. If Manual Code is check
 msgstr "Se selezionato, estrae il codice cliente con la query specificata sotto o richiede che venga inserito manualmente. Il codice cliente potrà essere utilizato nella query del CQR con %CUSTOMERCODE%"
 
 msgid "Manual Customer Code"
-msgstr "Codice Cliente Manuale"
+msgstr "Richiesta Codice Cliente Manuale"
 
 msgid "If checked customer code can be dialed by caller if ID is not recognized"
 msgstr "Se selezionato, il codice cliente potrà essere inserito dal chiamante"
@@ -72,31 +72,31 @@ msgid "Select one of supported database type for custome code query"
 msgstr "Selezionare uno dei tipi di database supportati per la query per il codice cliente"
 
 msgid "Customer Code Db URL"
-msgstr "URL db codice cliente"
+msgstr "URL db Codice Cliente"
 
 msgid "URL of database for custome code query"
 msgstr "URL del database per il codice cliente"
 
 msgid "Customer Code Db Name"
-msgstr "Nome db codice cliente"
+msgstr "Nome db Codice Cliente"
 
 msgid "Name of database for custome code query"
 msgstr "Nome del database per il codice cliente"
 
 msgid "Customer Code Db Username"
-msgstr "Username db codice cliente"
+msgstr "Username db Codice Cliente"
 
 msgid "Username that will be used accessing database for custome code query"
 msgstr "Username che sarà usato per accedere al database per risolvere il codice cliente"
 
 msgid "Customer Code Db Password"
-msgstr "Password db codice cliente"
+msgstr "Password db Codice Cliente"
 
 msgid "Password for database for custome code query"
 msgstr "Password per il database del codice cliente"
 
 msgid "Customer Code Query"
-msgstr "Query codice cliente"
+msgstr "Query Codice Cliente"
 
 msgid "Query for custome code. %CID% will be replaced with caller ID. Example: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = '%CID%'"
 msgstr "Query per estrarre il codice cliente. Si può utilizzare la variabile %CID% che verrà sostituita con l'ID del chiamante. Esempio: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = '%CID%'"
@@ -188,3 +188,5 @@ msgstr "Annuncio Errore Codice Cliente"
 msgid "Greeting to be played when an error occur typing Customer Code."
 msgstr "Annuncio che viene riprodotto quando avviene un errore nell'inserimento del Codice Cliente."
 
+msgid "Customer Code Check Query"
+msgstr "Query Controllo Codice Cliente"

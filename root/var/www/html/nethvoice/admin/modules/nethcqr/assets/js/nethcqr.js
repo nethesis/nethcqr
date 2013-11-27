@@ -77,6 +77,9 @@ $(document).ready(function(){
 	
 	//show/hide timeout elements on change
 	$('#timeout_loops').change(timeout_elements)
+
+	//show/hide manual code fields
+	manual_code_switch();
 });
 
 function restore_form_elemens() {
@@ -130,13 +133,25 @@ function timeout_elements() {
 }
 
 //hide/show client code announce and client code error announce checking manual code checkbox state
-$("#manual_code").live('change',function () {
-    if(this.checked) {
+function manual_code_switch(){
+    if($("#manual_code").attr('checked')==='checked')
+    {
         $("#cod_cli_announcement").parent().parent().show();
         $("#err_announcement").parent().parent().show();
+        $("#code_length").parent().parent().show();
+        $("#code_retries").parent().parent().show();
+        $("#ccc_query").parent().parent().show();
     } else {
         $("#cod_cli_announcement").parent().parent().hide();
         $("#err_announcement").parent().parent().hide();
+        $("#code_length").parent().parent().hide();
+        $("#code_retries").parent().parent().hide();
+        $("#ccc_query").parent().parent().hide();
     }
+
+};
+
+$("#manual_code").live('change',function () {
+manual_code_switch();
 });
 

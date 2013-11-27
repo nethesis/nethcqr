@@ -59,7 +59,7 @@ function nethcqr_configprocess(){
                 $get_var = array('id_cqr', 'name', 'announcement', 'description', 'use_code',
                                                 'manual_code', 'cod_cli_announcement', 'err_announcement', 'code_length', 'code_retries',
                                                 'default_destination', 'db_type','db_url','db_name', 'db_user', 'db_pass','query',
-                                                'cc_db_type','cc_db_url','cc_db_name', 'cc_db_user', 'cc_db_pass','cc_query');
+                                                'cc_db_type','cc_db_url','cc_db_name', 'cc_db_user', 'cc_db_pass','cc_query','ccc_query');
                 foreach($get_var as $var){
                         $vars[$var] = isset($_REQUEST[$var])    ? $_REQUEST[$var]               : '';
                 }
@@ -95,7 +95,7 @@ function nethcqr_configpageload(){
        	                                        'manual_code', 'cod_cli_announcement', 'err_announcement', 
                                                 'code_length', 'code_retries','default_destination',
        	                                        'db_type','db_url','db_name', 'db_user', 'db_pass','query',
-						'cc_db_type','cc_db_url','cc_db_name', 'cc_db_user', 'cc_db_pass','cc_query');
+						'cc_db_type','cc_db_url','cc_db_name', 'cc_db_user', 'cc_db_pass','cc_query','ccc_query');
 		//setta le variabili di default del nuovo cqr
 		foreach ($deet as $d) {
 			switch ($d){
@@ -174,31 +174,6 @@ function nethcqr_configpageload(){
 
                 $currentcomponent->addguielem($cc_section,
                         new gui_checkbox('use_code', $cqr['use_code'], _('Use Customer Code'), _('If checked, extract customer code from caller ID. If Manual Code is checked too, customer code can be dialed by caller if ID is not recognized. Customer code can be used in CQR query using %CUSTOMERCODE%')));
-                //Custome code manual_code
-                $currentcomponent->addguielem($cc_section,
-                        new gui_checkbox('manual_code', $cqr['manual_code'], _('Manual Customer Code'), _('If checked customer code can be dialed by caller if ID is not recognized')));
-	        //add recording to ask customer cod
-                $currentcomponent->addoptlistitem('recordings', '', _('None'));
-                foreach(recordings_list() as $r)
-                        $currentcomponent->addoptlistitem('recordings', $r['id'], $r['displayname']);
-
-                $currentcomponent->setoptlistopts('recordings', 'sort', false);
-
-                $currentcomponent->addguielem($cc_section,
-                new gui_selectbox('cod_cli_announcement', $currentcomponent->getoptlist('recordings'),
-                $cqr['cod_cli_announcement'], _('Announcement Customer Code'), _('Greeting to be played to ask Customer Code.'), false));
-	        //add recording for error typing customer code
-                $currentcomponent->addguielem($cc_section,
-                new gui_selectbox('err_announcement', $currentcomponent->getoptlist('recordings'),
-                $cqr['err_announcement'], _('Announcement Customer Code Error'), _('Greeting to be played when an error occur typing Customer Code.'), false));
-		//code_length
-		$currentcomponent->addguielem($cc_section,
-                new gui_selectbox('code_length', $currentcomponent->getoptlist('code_length'),
-                $cqr['code_length'], _('Customer Code Length'), _('Length of customer code'), false));
-		//code_retries
-		$currentcomponent->addguielem($cc_section,
-                new gui_selectbox('code_retries', $currentcomponent->getoptlist('code_retries'),
-                $cqr['code_retries'], _('Code Retry'), _('Number of time code can be redialed'), false));
                 //Custome code db_type
                 $currentcomponent->addoptlist('cc_db_type', false);
                         $currentcomponent->addoptlistitem('cc_db_type', 'mysql', 'MySQL');
@@ -221,6 +196,34 @@ function nethcqr_configpageload(){
                 //query
                 $currentcomponent->addguielem($cc_section,
                         new gui_textarea('cc_query', stripslashes($cqr['cc_query']), _('Customer Code Query'), _('Query for custome code. %CID% will be replaced with caller ID. Example: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = \'%CID%\'')));
+                //Custome code manual_code
+                $currentcomponent->addguielem($cc_section,
+                        new gui_checkbox('manual_code', $cqr['manual_code'], _('Manual Customer Code'), _('If checked customer code can be dialed by caller if ID is not recognized')));
+	        //add recording to ask customer cod
+                $currentcomponent->addoptlistitem('recordings', '', _('None'));
+                foreach(recordings_list() as $r)
+                        $currentcomponent->addoptlistitem('recordings', $r['id'], $r['displayname']);
+
+                $currentcomponent->setoptlistopts('recordings', 'sort', false);
+
+                $currentcomponent->addguielem($cc_section,
+                new gui_selectbox('cod_cli_announcement', $currentcomponent->getoptlist('recordings'),
+                $cqr['cod_cli_announcement'], _('Announcement Customer Code'), _('Greeting to be played to ask Customer Code.'), false));
+	        //add recording for error typing customer code
+                $currentcomponent->addguielem($cc_section,
+                new gui_selectbox('err_announcement', $currentcomponent->getoptlist('recordings'),
+                $cqr['err_announcement'], _('Announcement Customer Code Error'), _('Greeting to be played when an error occur typing Customer Code.'), false));
+		//code_length
+		$currentcomponent->addguielem($cc_section,
+                new gui_selectbox('code_length', $currentcomponent->getoptlist('code_length'),
+                $cqr['code_length'], _('Customer Code Length'), _('Length of manual customer code'), false));
+		//code_retries
+		$currentcomponent->addguielem($cc_section,
+                new gui_selectbox('code_retries', $currentcomponent->getoptlist('code_retries'),
+                $cqr['code_retries'], _('Code Retry'), _('Number of time code can be redialed'), false));
+                //query customer code check 
+                $currentcomponent->addguielem($cc_section,
+                new gui_textarea('ccc_query', stripslashes($cqr['ccc_query']), _('Customer Code Check Query'), _('Query for custome code checking. %CID% will be replaced with caller ID. Example: SELECT `customer_code` FROM `phonebook` WHERE `caller_id` = \'%CID%\'')));
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//cqr options
@@ -381,15 +384,16 @@ function nethcqr_save_details($vals){
         $cc_db_user=$vals['cc_db_user'];
         $cc_db_pass=$vals['cc_db_pass'];
         $cc_query=$vals['cc_query'];
+        $ccc_query=$vals['ccc_query'];
         if ($vals['id_cqr']) {
-		$sql = "UPDATE `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `manual_code`=$manual_code, `cod_cli_announcement`=$cod_cli_announcement, `err_announcement`=$err_announcement, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query' WHERE `id_cqr` = $id_cqr";
+		$sql = "UPDATE `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `manual_code`=$manual_code, `cod_cli_announcement`=$cod_cli_announcement, `err_announcement`=$err_announcement, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query', `ccc_query`='$ccc_query' WHERE `id_cqr` = $id_cqr";
                 $foo = $db->query($sql);
                 if($db->IsError($foo)) {
                         die_freepbx(print_r($vals,true).' '.$foo->getDebugInfo());
                 }
         } else {
                 unset($vals['id_cqr']);
-		$sql = "INSERT INTO `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `manual_code`=$manual_code, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query' ";
+		$sql = "INSERT INTO `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `manual_code`=$manual_code, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query', `ccc_query`='$ccc_query' ";
                 $foo = $db->query($sql);
                 if($db->IsError($foo)) {
                         die_freepbx(print_r($vals,true).' '.$foo->getDebugInfo());

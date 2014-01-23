@@ -2,6 +2,7 @@
 	<rawname>nethcqr</rawname>
 	<name>Call Query Routing</name>
 	<version>0.0.0.2</version>
+        <publisher>Nethesis</publisher>
 	<type>tool</type>
 	<category>Applications</category>
 	<description>cqr cqr cqr cqr</description>

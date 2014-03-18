@@ -2,4 +2,8 @@
 
 use esmith::Build::CreateLinks qw(:all);
 
-templates2events("/usr/lib/node/proxycti/config/dataprofiles_base.ini", "freepbx-menu-update");
+my $event = 'nethvoice-module-nethcqr-update';
+
+event_link ("nethvoice-module-nethcqr-install", $event ,'90');
+templates2events ("/etc/asterisk/freepbx_menu.conf",$event);
+

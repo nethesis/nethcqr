@@ -349,7 +349,7 @@ function nethcqr_draw_entries($id_cqr){
 }
 
 function nenethcqr_my_debug($msg){
-$openfile = fopen ("/tmp/fpbx_debug.log","a");
+$openfile = fopen ("/var/log/asterisk/freepbx_dbug.log","a");
 $msg = var_export($msg,true);
 fwrite ($openfile,"$msg\n\n");
 fclose ($openfile);

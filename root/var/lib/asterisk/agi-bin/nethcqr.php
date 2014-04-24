@@ -119,13 +119,22 @@ else
                     if ($pin['code'] != AGIRES_OK || $pin['result'] <= 0 ) 
  		    { #non funziona dtmf, vado avanti 
                         nethcqr_debug("dtmf isn't working");
-                                return false;
+			$codcli = -1;
                     } elseif ($pinchr >= "0" and $pinchr <= "9") {
                         $codcli = $codcli.$pinchr;
                     }
-                nethcqr_debug("Codcli: ".$pin['result']."-".$pin['code']."-".$codcli,1);
+                    nethcqr_debug("Codcli: ".$pin['result']."-".$pin['code']."-".$codcli,1);
+		    if ($codcli == -1) break; //exit from asking digit loop if someone press # without any digit 	
                 }
-
+		if ($codcli == -1) 
+		{
+			//if someone pressed # without digit, go to next try. 
+			$try++;
+			nethcqr_debug ("Invalid code");
+			$err_msg = recordings_get_file($cqr["err_announcement"]);
+			$agi->stream_file($err_msg);
+			continue;
+		}
 	        //CHECK MANUAL CUSTOMER CODE
 		if (isset($cqr['ccc_query']) && $cqr['ccc_query'] != '')
 		{

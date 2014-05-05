@@ -68,7 +68,7 @@ $(document).ready(function(){
 	})
 	
 	//delete rows on click
-	$('.delete_entrie').live('click', function(){
+	$('.delete_entrie').on('click', function(){
 		$(this).closest('tr').fadeOut('normal', function(){$(this).closest('tr').remove();})
 	})
 	
@@ -151,7 +151,7 @@ function manual_code_switch(){
 
 };
 
-$("#manual_code").live('change',function () {
+$("#manual_code").on('change',function () {
 manual_code_switch();
 });
 

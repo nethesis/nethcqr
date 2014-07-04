@@ -20,6 +20,10 @@ NethCQR module for Nethvoice
 
 
 %build
+for PO in $(find root -name "*\.po" | grep 'i18n\/it_IT')
+    do msgfmt -o $(echo ${PO} | sed 's/\.po$/.mo/g') ${PO}
+    /bin/rm ${PO}
+done
 perl createlinks
 
 %install
@@ -31,8 +35,6 @@ rm -rf $RPM_BUILD_ROOT
 --dir /var/lib/asterisk 'attr(0755,asterisk,asterisk)' \
 $RPM_BUILD_ROOT > %{name}-%{version}-filelist
 
-
-%post
 
 
 %clean

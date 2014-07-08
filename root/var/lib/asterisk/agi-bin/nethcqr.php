@@ -4,7 +4,7 @@ include_once ("/etc/freepbx.conf");
 
 define("AGIBIN_DIR", "/var/lib/asterisk/agi-bin");
 define("AMPORTAL_CONF", "/etc/amportal.conf");
-define("DEBUG", "TRUE");
+define("DEBUG", "FALSE");
 include(AGIBIN_DIR."/phpagi.php");
 
 require_once('DB.php');
@@ -44,23 +44,23 @@ $variables = array (
     'CID' => $agi->request['agi_callerid']
 );
 
-if (!isset($cqr['use_code']) || $cqr['use_code'] === 0)
+if (!isset($cqr['use_code']) || $cqr['use_code'] == 0)
 {
     if (isset($variables['CID']) && $variables['CID'] != '' && $variables['CID'] != 0 )
     {
-    	//make destination query using only CID
-	nethcqr_debug("breakpoint 1 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
-	$handler = nethcqr_db_connect($cqr['db_type'],$cqr['db_name'],$cqr['db_user'],$cqr['db_pass'],$cqr['db_url']);
-        nethcqr_debug (var_dump($cqr['cc_query']));
-	$cc_query = nethcqr_evaluate($cqr['cc_query'],$variables);
-	nethcqr_debug ($cc_query);
-	$cqr_query_results = nethcqr_query($cc_query,$handler,$cqr['db_type']);
-	nethcqr_debug ($cqr_query_results);
-	nethcqr_goto ($cqr_query_results);	
+        //make destination query using only CID
+        nethcqr_debug("breakpoint 1 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
+        $handler = nethcqr_db_connect($cqr['db_type'],$cqr['db_name'],$cqr['db_user'],$cqr['db_pass'],$cqr['db_url']);
+        nethcqr_debug (var_dump($cqr['query']));
+        $query = nethcqr_evaluate($cqr['query'],$variables);
+        //nethcqr_debug ($query);
+        $query_results = nethcqr_query($query,$handler,$cqr['db_type']);
+        nethcqr_debug ($query_results);
+        nethcqr_goto ($query_results);    
     }
     else
     {
-	nethcqr_debug("breakpoint 2 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
+        nethcqr_debug("breakpoint 2 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
         nethcqr_goto_destination($cqr['default_destination']);
     }
 } 
@@ -88,7 +88,7 @@ else
     } 
     else 
     {
-	if ($cqr['manual_code']==='1')
+	if ($cqr['manual_code']=='1')
 	{
             //ask for manual code
             $try=1;
@@ -217,9 +217,9 @@ function nethcqr_goto($cqr_query_results)
 	nethcqr_debug ("query result ".$cqr_query_result);
         foreach ($entries as $entrie)
 	{
-	    if ($cqr_query_result === $entrie['condition']) 
+	    if ($cqr_query_result == $entrie['condition']) 
 	    {//WIN
-                nethcqr_debug("$cqr_query_result === ".$entrie['condition']." -> ".$entrie['destination']);
+                nethcqr_debug("$cqr_query_result == ".$entrie['condition']." -> ".$entrie['destination']);
                 nethcqr_goto_destination($entrie['destination']);
             }
 	}
@@ -254,7 +254,7 @@ function nethcqr_evaluate($msg,$variables){
 
 function nethcqr_db_connect($db_type,$db_name,$db_user,$db_pass,$db_url='localhost')
 {
-    if ($db_type==='mysql')
+    if ($db_type=='mysql')
     {
         $datasource = 'mysql://'.$db_user.':'.$db_pass.'@'.$db_url.'/'.$db_name;
         $handle =& DB::connect($datasource);
@@ -264,7 +264,7 @@ function nethcqr_db_connect($db_type,$db_name,$db_user,$db_pass,$db_url='localho
 	    return false;
 	}
     }
-    elseif ($db_type==='mssql')
+    elseif ($db_type=='mssql')
     {
         $handle = odbc_connect($db_name,$db_user,$db_pass);
         if (!isset($handle))
@@ -279,7 +279,7 @@ function nethcqr_db_connect($db_type,$db_name,$db_user,$db_pass,$db_url='localho
 
 function nethcqr_query($sql,$handle,$db_type='mysql')
 {
-    if ($db_type==='mysql')
+    if ($db_type=='mysql')
     {
         $results = $handle->getAll($sql, DB_FETCHMODE_ASSOC);
 	if(DB::IsError($results))
@@ -288,7 +288,7 @@ function nethcqr_query($sql,$handle,$db_type='mysql')
 	    return false;
 	}
     } 
-    elseif ($db_type==='mssql')
+    elseif ($db_type=='mssql')
     {
 	$result = odbc_exec($handle,$sql);
 	while ($row = odbc_fetch_array($result))

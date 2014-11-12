@@ -46,21 +46,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,asterisk,asterisk)
 
 %changelog
-* Tue Mar 18 2014 Stefano Fancello <stefano.fancello@nethesis.it> - 0.0.6-1nh
-- First NethVoice-ng package
-* Wed Nov 27 2013 Stefano Fancello <stefano.fancello@nethesis.it> - 0.0.5-1nh
-- changed agi to add check query for manual customr code
-- changed agi to take annuncement from db
-- changed module web page to add check query, customer code announcement and error announcement for manual customr code
-- added to mysql table nethcqr_details cod_cli_announcement, err_announcement and ccc_query
-- modified js to hide field related to manual customer code when it is not checked
-- fixed translations
-
-* Wed Nov 13 2013 Stefano Fancello <stefano.fancello@nethesis.it> - 0.0.3-1nh
-- added custom messages
-- fixed manual code
-* Fri Jul 13 2012 Stefano Fancello <stefano.fancello@nethesis.it> - 0.0.2-1nh
-- template for /etc/asterisk/freepbx_menu.conf
-* Mon Apr 02 2012 Stefano Fancello <stefano.fancello@nethesis.it> - 0.0.1-1nh
--first package 
 

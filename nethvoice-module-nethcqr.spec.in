@@ -46,4 +46,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,asterisk,asterisk)
 
 %changelog
+* Wed Nov 12 2014 Stefano Fancello <stefano.fancello@nethesis.it> - 1.0.2-1.ns6
+- First NethVoice NG release
+
 

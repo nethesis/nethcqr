@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS `nethcqr_details` (
   `announcement` int(11),
   `use_code` BOOLEAN default FALSE,
   `manual_code` BOOLEAN default FALSE, 
+  `cod_cli_announcement` int(11) DEFAULT NULL,
+  `err_announcement` int(11) DEFAULT NULL,
   `code_length` int(2) default 5,
   `code_retries` int(1) default 3,
   `db_type` varchar(30) default 'mysql',
@@ -19,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `nethcqr_details` (
   `cc_db_user` varchar(30) default NULL,
   `cc_db_pass` varchar(90) default NULL,
   `cc_query` varchar(8000) default NULL,
+  `ccc_query` varchar(8000) default NULL,
   `default_destination` varchar(50) default NULL,
   PRIMARY KEY  (`id_cqr`)
 );

@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+//PHPLICENSE 
 include_once ("/etc/freepbx.conf");
 
 define("AGIBIN_DIR", "/var/lib/asterisk/agi-bin");

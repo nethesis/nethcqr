@@ -28,6 +28,18 @@ for PO in $(find root -name "*\.po" | grep 'i18n\/it_IT')
     /bin/rm ${PO}
 done
 perl createlinks
+#php license substitution 
+find root/ -type f | xargs \
+    sed -i 's/\/\/PHPLICENSE/\/\/\n\/\/ Copyright (C) 2010-2015 Nethesis s.r.l. - All rights reserved. \n\/\//g'
+#bash license substitution 
+find root/ -type f | xargs \
+    sed -i 's/#BASHLICENSE/##\n##Copyright (C) 2010-2015 Nethesis s.r.l. - All rights reserved. \n##/g'
+#mysql license substitution
+find root/ -type f | xargs \
+    sed -i 's/--MySQLLICENSE/--\n-- Copyright (C) 2010-2015 Nethesis s.r.l. - All rights reserved. \n--/g'
+#ini license substitution
+find root/ -type f | xargs \
+    sed -i 's/;INILICENSE/;\n; Copyright (C) 2010-2015 Nethesis s.r.l. - All rights reserved. \n;/g'
 
 %install
 rm -rf $RPM_BUILD_ROOT

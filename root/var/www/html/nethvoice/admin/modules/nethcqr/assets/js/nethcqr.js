@@ -1,3 +1,4 @@
+//PHPLICENSE
 $(document).ready(function(){
 	//on load, hide elememnts that may need to be hidden
 	invalid_elements();

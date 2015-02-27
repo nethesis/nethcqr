@@ -1,5 +1,5 @@
 <?php
-
+//PHPLICENSE 
 $li[] = '<a href="config.php?display='. urlencode($display) . '&action=add">' . _("Add CQR") . '</a>';
 
 if (isset($cqr_results)){

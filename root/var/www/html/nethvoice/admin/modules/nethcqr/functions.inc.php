@@ -1,5 +1,5 @@
 <?php
-
+//PHPLICENSE
 function nethcqr_destinations(){
 	$cqrs = nethcqr_get_details();
 	if ($cqrs){

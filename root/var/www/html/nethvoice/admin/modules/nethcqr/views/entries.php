@@ -1,4 +1,5 @@
 <?php
+//PHPLICENSE
 $table = new CI_Table;
 $table->set_template(array('table_open' => '<table class="alt_table NethCQREntries" id="nethcqr_entries">'));
 //build header

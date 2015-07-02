@@ -82,7 +82,7 @@ else
             if(!$pb instanceof DB_Error) {
                 $number=$variables['CID'];
 	        $sql="SELECT `workphone` FROM `phonebook` WHERE (`homephone` LIKE '%$number' OR `cellphone` LIKE '%$number') AND `workphone` <> '' AND `workphone` IS NOT NULL";
-                $workphone = $pb->getAll($sql,DB_FETCHMODE_ORDERED);
+                $workphone = @$pb->getAll($sql,DB_FETCHMODE_ORDERED);
                 if ($pb->isError($workphone)){
                     if (!empty($workphone) && count($workphone)==1){
                          $variables['CID']=$workphone[0][0];
@@ -305,7 +305,7 @@ function nethcqr_query($sql,$handle,$db_type='mysql')
 {
     if ($db_type=='mysql')
     {
-        $results = $handle->getAll($sql, DB_FETCHMODE_ASSOC);
+        $results = @$handle->getAll($sql, DB_FETCHMODE_ASSOC);
 	if($handle->isError($results))
 	{
 	    nethcqr_debug ("ERROR: $sql -> ".$results->getMessage());

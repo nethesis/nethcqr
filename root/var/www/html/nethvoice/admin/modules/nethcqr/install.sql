@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `nethcqr_details` (
   `announcement` int(11),
   `use_code` BOOLEAN default FALSE,
   `manual_code` BOOLEAN default FALSE, 
+  `use_workphone` BOOLEAN default TRUE, 
   `cod_cli_announcement` int(11) DEFAULT NULL,
   `err_announcement` int(11) DEFAULT NULL,
   `code_length` int(2) default 5,

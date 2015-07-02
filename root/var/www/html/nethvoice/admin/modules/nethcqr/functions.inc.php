@@ -19,7 +19,7 @@ function nethcqr_get_config($engine){
                         if($cqrs) {
                                 foreach($cqrs as $cqr) {
 					if (recordings_get_file($cqr['announcement'])!='') {
-						$ext->add('nethcqr',$cqr['id_cqr'],'1', new ext_background(recordings_get_file($cqr['announcement']).',m'));
+						$ext->add('nethcqr',$cqr['id_cqr'],'1', new ext_background(recordings_get_file($cqr['announcement'])));
 						$ext->add('nethcqr',$cqr['id_cqr'],'', new ext_agi('nethcqr.php,'.$cqr['id_cqr']));
 					} else {
 						$ext->add('nethcqr',$cqr['id_cqr'],'1', new ext_agi('nethcqr.php,'.$cqr['id_cqr']));
@@ -56,7 +56,7 @@ function nethcqr_configprocess(){
         if (isset($_REQUEST['display']) && $_REQUEST['display'] == 'nethcqr'){
                 global $db;
                 //get variables
-                $get_var = array('id_cqr', 'name', 'announcement', 'description', 'use_code',
+                $get_var = array('id_cqr', 'name', 'announcement', 'description', 'use_code', 'use_workphone', 
                                                 'manual_code', 'cod_cli_announcement', 'err_announcement', 'code_length', 'code_retries',
                                                 'default_destination', 'db_type','db_url','db_name', 'db_user', 'db_pass','query',
                                                 'cc_db_type','cc_db_url','cc_db_name', 'cc_db_user', 'cc_db_pass','cc_query','ccc_query');
@@ -91,7 +91,7 @@ function nethcqr_configpageload(){
 
 	if ($action  == 'add') {
 		$currentcomponent->addguielem('_top', new gui_pageheading('title', _('Add CQR')), 0); //Titolo pagina
-		$deet = array('id_cqr', 'name', 'announcement', 'description', 'use_code',
+		$deet = array('id_cqr', 'name', 'announcement', 'description', 'use_code', 'use_workphone',
        	                                        'manual_code', 'cod_cli_announcement', 'err_announcement', 
                                                 'code_length', 'code_retries','default_destination',
        	                                        'db_type','db_url','db_name', 'db_user', 'db_pass','query',
@@ -104,6 +104,9 @@ function nethcqr_configpageload(){
 					$cqr[$d] = 'localhost';
 					break;
 				case 'use_code': 
+					$cqr[$d] = 1;
+       		        		break;
+				case 'use_workphone': 
 					$cqr[$d] = 1;
        		        		break;
 				case 'announcement':
@@ -199,6 +202,9 @@ function nethcqr_configpageload(){
                 //Custome code manual_code
                 $currentcomponent->addguielem($cc_section,
                         new gui_checkbox('manual_code', $cqr['manual_code'], _('Manual Customer Code'), _('If checked customer code can be dialed by caller if ID is not recognized')));
+		//Use work phone for query if exists
+                $currentcomponent->addguielem($cc_section,
+                        new gui_checkbox('use_workphone', $cqr['use_workphone'], _('Use workphone for query'), _('Use company workphone for query if available instead of callers.')));
 	        //add recording to ask customer cod
                 $currentcomponent->addoptlistitem('recordings', '', _('None'));
                 foreach(recordings_list() as $r)
@@ -366,6 +372,7 @@ function nethcqr_save_details($vals){
         $description=$vals['description'];
         $announcement=(int)$vals['announcement'];
 	$use_code = ($vals['use_code']==='on') ? 1 : 0;
+	$use_workphone = ($vals['use_workphone']==='on') ? 1 : 0;
 	$manual_code = ($vals['manual_code']==='on') ? 1 : 0;
         $cod_cli_announcement=(int)$vals['cod_cli_announcement'];
         $err_announcement=(int)$vals['err_announcement'];
@@ -386,14 +393,14 @@ function nethcqr_save_details($vals){
         $cc_query=$vals['cc_query'];
         $ccc_query=$vals['ccc_query'];
         if ($vals['id_cqr']) {
-		$sql = "UPDATE `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `manual_code`=$manual_code, `cod_cli_announcement`=$cod_cli_announcement, `err_announcement`=$err_announcement, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query', `ccc_query`='$ccc_query' WHERE `id_cqr` = $id_cqr";
+		$sql = "UPDATE `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `use_workphone`=$use_workphone, `manual_code`=$manual_code, `cod_cli_announcement`=$cod_cli_announcement, `err_announcement`=$err_announcement, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query', `ccc_query`='$ccc_query' WHERE `id_cqr` = $id_cqr";
                 $foo = $db->query($sql);
                 if($db->IsError($foo)) {
                         die_freepbx(print_r($vals,true).' '.$foo->getDebugInfo());
                 }
         } else {
                 unset($vals['id_cqr']);
-		$sql = "INSERT INTO `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `manual_code`=$manual_code, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query', `ccc_query`='$ccc_query' ";
+		$sql = "INSERT INTO `nethcqr_details` SET `name`='$name', `description`='$description', `announcement`=$announcement, `use_code`=$use_code, `use_workphone`=$use_workphone, `manual_code`=$manual_code, `code_length`=$code_length, `code_retries`=$code_retries, `db_type`='$db_type', `db_url`='$db_url', `db_name`='$db_name', `db_user`='$db_user', `db_pass`='$db_pass', `query`='$query', `default_destination`='$default_destination', `cc_db_type`='$cc_db_type', `cc_db_url`='$cc_db_url', `cc_db_name`='$cc_db_name', `cc_db_user`='$cc_db_user', `cc_db_pass`='$cc_db_pass', `cc_query`='$cc_query', `ccc_query`='$ccc_query' ";
                 $foo = $db->query($sql);
                 if($db->IsError($foo)) {
                         die_freepbx(print_r($vals,true).' '.$foo->getDebugInfo());

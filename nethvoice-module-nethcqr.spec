@@ -1,6 +1,6 @@
 Name:		nethvoice-module-nethcqr
-Version: @@VERSION@@
-Release: @@RELEASE@@
+Version: 	1.0.3
+Release: 	1%{dist}
 Summary:	NethCQR module for Nethvoice
 Group:		Networking/Daemons	
 License:	GPL	
@@ -60,6 +60,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,asterisk,asterisk)
 
 %changelog
+* Wed Mar 11 2015 Stefano Fancello <stefano.fancello@nethesis.it> - 1.0.3-1.ns6
+- added Licenses in files
+- added missing columns to default database
+- Added requires for nethserver-nethvoice-enterprise package to check 
+
 * Wed Nov 12 2014 Stefano Fancello <stefano.fancello@nethesis.it> - 1.0.2-1.ns6
 - First NethVoice NG release
 

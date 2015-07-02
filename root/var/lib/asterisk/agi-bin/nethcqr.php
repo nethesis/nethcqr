@@ -10,6 +10,7 @@ include(AGIBIN_DIR."/phpagi.php");
 
 require_once('DB.php');
 global $db;
+global $amp_conf;
 
 $agi = new AGI();
 
@@ -68,11 +69,33 @@ if (!isset($cqr['use_code']) || $cqr['use_code'] == 0)
 else 
 {
     //try to get CUSTOMERCODE from CID
-    if (isset($variables['CID']) && $variables['CID'] != '' && $variables['CID'] != 0 )
-    $handler = nethcqr_db_connect($cqr['cc_db_type'],$cqr['cc_db_name'],$cqr['cc_db_user'],$cqr['cc_db_pass'],$cqr['cc_db_url']);
-    nethcqr_debug ($cqr['cc_query']);	
-    $cc_query = nethcqr_evaluate($cqr['cc_query'],$variables);
-    $cqr_query_results = nethcqr_query($cc_query,$handler,$cqr['cc_db_type']);
+    if (isset($variables['CID']) && $variables['CID'] != '' && $variables['CID'] != 0 ){
+	if ($cqr['use_workphone']) {
+	    //search if there is a workphone to use as CID 
+            $pb_user = $amp_conf["AMPDBUSER"];
+            $pb_pass = $amp_conf["AMPDBPASS"];
+            $pb_host = 'localhost';
+            $pb_name = 'phonebook';
+            $pb_engine = 'mysql';
+            $pb_datasource = $pb_engine.'://'.$pb_user.':'.$pb_pass.'@'.$pb_host.'/'.$pb_name;
+            $pb = @DB::connect($pb_datasource); // attempt connection
+            if(!$pb instanceof DB_Error) {
+                $number=$variables['CID'];
+	        $sql="SELECT `workphone` FROM `phonebook` WHERE (`homephone` LIKE '%$number' OR `cellphone` LIKE '%$number') AND `workphone` <> '' AND `workphone` IS NOT NULL";
+                $workphone = $pb->getAll($sql,DB_FETCHMODE_ORDERED);
+                if ($pb->isError($workphone)){
+                    if (!empty($workphone) && count($workphone)==1){
+                         $variables['CID']=$workphone[0][0];
+                    }
+                }
+	    }
+   	    $pb->disconnect();
+	}
+        $handler = nethcqr_db_connect($cqr['cc_db_type'],$cqr['cc_db_name'],$cqr['cc_db_user'],$cqr['cc_db_pass'],$cqr['cc_db_url']);
+        nethcqr_debug ($cqr['cc_query']);	
+        $cc_query = nethcqr_evaluate($cqr['cc_query'],$variables);
+        $cqr_query_results = nethcqr_query($cc_query,$handler,$cqr['cc_db_type']);
+    }
     if (is_array($cqr_query_results)) $variables['CUSTOMERCODE'] = $cqr_query_results[0];
     else $variables['CUSTOMERCODE'] = $cqr_query_results;
 
@@ -104,7 +127,7 @@ else
                 $codcli='';
                 unset($pin);
                 nethcqr_debug("Getting manual customer code, try: $try");
-                $pin = $agi->fastpass_stream_file(&$buf,$welcome_audio_file,'1234567890#');
+                $pin = $agi->fastpass_stream_file($buf,$welcome_audio_file,'1234567890#');
                 nethcqr_debug($pin);
                 nethcqr_debug($buf);
                 if ($pin['result'] >0)
@@ -259,7 +282,7 @@ function nethcqr_db_connect($db_type,$db_name,$db_user,$db_pass,$db_url='localho
     {
         $datasource = 'mysql://'.$db_user.':'.$db_pass.'@'.$db_url.'/'.$db_name;
         $handle =& DB::connect($datasource);
-        if (PEAR::isError($handle)|| ($handle instanceof DB_Error) ) 
+        if ($handle instanceof DB_Error)
 	{
 	    nethcqr_debug("ERROR: can't connect to database $db_name -> ". $handle->getMessage());
 	    return false;
@@ -283,7 +306,7 @@ function nethcqr_query($sql,$handle,$db_type='mysql')
     if ($db_type=='mysql')
     {
         $results = $handle->getAll($sql, DB_FETCHMODE_ASSOC);
-	if(DB::IsError($results))
+	if($handle->isError($results))
 	{
 	    nethcqr_debug ("ERROR: $sql -> ".$results->getMessage());
 	    return false;

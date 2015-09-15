@@ -55,10 +55,6 @@ $RPM_BUILD_ROOT > %{name}-%{version}-filelist
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-/sbin/e-smith/signal-event nethvoice-module-nethcqr-update
-
-
 %files -f %{name}-%{version}-filelist
 %defattr(-,asterisk,asterisk)
 

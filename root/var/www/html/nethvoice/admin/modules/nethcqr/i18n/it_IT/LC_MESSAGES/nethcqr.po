@@ -194,3 +194,9 @@ msgstr "Query Controllo Codice Cliente"
 msgid "Query for custome code checking. %CODCLI% will be replaced with the custome code. Example: SELECT `customer_code` FROM `phonebook` WHERE `customer_code` = '%CODCLI%'"
 msgstr "Query per controllare che il codice cliente inserito sia corretto. %CODCLI% verrà sostituito con il codice cliente immesso. Esempio: SELECT `customer_code` FROM `phonebook` WHERE `customer_code` = '%CODCLI%'"
 
+msgid "Use workphone for query"
+msgstr "Usa il telefono lavoro per le query"
+
+msgid "Use company workphone for query if available instead of callers."
+msgstr "Usa il telefono lavoro per le query se disponibile invece del numero chiamante reale."
+

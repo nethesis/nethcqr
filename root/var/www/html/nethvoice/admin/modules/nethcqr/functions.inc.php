@@ -19,7 +19,7 @@ function nethcqr_get_config($engine){
                         if($cqrs) {
                                 foreach($cqrs as $cqr) {
 					if (recordings_get_file($cqr['announcement'])!='') {
-						$ext->add('nethcqr',$cqr['id_cqr'],'1', new ext_background(recordings_get_file($cqr['announcement'])));
+						$ext->add('nethcqr',$cqr['id_cqr'],'1', new ext_background(recordings_get_file($cqr['announcement']).',m'));
 						$ext->add('nethcqr',$cqr['id_cqr'],'', new ext_agi('nethcqr.php,'.$cqr['id_cqr']));
 					} else {
 						$ext->add('nethcqr',$cqr['id_cqr'],'1', new ext_agi('nethcqr.php,'.$cqr['id_cqr']));

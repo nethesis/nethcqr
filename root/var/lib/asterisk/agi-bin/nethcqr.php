@@ -281,7 +281,7 @@ function nethcqr_db_connect($db_type,$db_name,$db_user,$db_pass,$db_url='localho
     if ($db_type=='mysql')
     {
         $datasource = 'mysql://'.$db_user.':'.$db_pass.'@'.$db_url.'/'.$db_name;
-        $handle =& DB::connect($datasource);
+        @$handle =& DB::connect($datasource);
         if ($handle instanceof DB_Error)
 	{
 	    nethcqr_debug("ERROR: can't connect to database $db_name -> ". $handle->getMessage());

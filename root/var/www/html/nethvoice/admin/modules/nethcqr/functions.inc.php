@@ -4,7 +4,7 @@ function nethcqr_destinations(){
 	$cqrs = nethcqr_get_details();
 	if ($cqrs){
 		foreach ($cqrs as $cqr) //TODO la riga qua sotto è stata scritta a caso
-			$extens[] = array('destination' => 'nethcqr,'.$cqr['id_cqr'].',1',$cqr['id_cqr'],1, 'description' => $cqr['name'] ? $cqr['name'] : "CQR ID: ".$cqr['id_cqr']);
+			$extens[] = array('dest' => 'nethcqr,'.$cqr['id_cqr'].',1',$cqr['id_cqr'],1, 'description' => $cqr['name'] ? $cqr['name'] : "CQR ID: ".$cqr['id_cqr']);
 	return $extens;
 	}
 	return null;
@@ -450,12 +450,20 @@ global $active_modules;
                 $thisid   = $result['id_cqr'];
                 $name = $result['name'] ? $result['name'] : 'CQR ' . $thisid;
                 $destlist[] = array(
-                        'destination' => $thisdest,
+                        'dest' => $thisdest,
                         'description' => sprintf(_("CQR: %s / Option: %s"),$name,$result['condition']),
                         'edit_url' => 'config.php?display=ivr&action=edit&id_cqr='.urlencode($thisid),
                 );
         }
         return $destlist;
+}
+
+function nethcqr_getdestinfo($dest) {
+        global $active_modules;
+        if (substr(trim($dest),0,17) == 'app-nethcqr-') {
+        
+        }
+return array('description' => "NethCQR", 'edit_url' => 'config.php?display=nethcqr');      
 }
 
 function nethcqr_change_destination($old_dest, $new_dest) {

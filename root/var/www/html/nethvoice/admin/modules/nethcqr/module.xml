@@ -1,7 +1,7 @@
 <module>
 	<rawname>nethcqr</rawname>
 	<name>Call Query Routing</name>
-	<version>0.0.0.2</version>
+	<version>1.0.5</version>
         <publisher>Nethesis</publisher>
 	<type>tool</type>
 	<category>Applications</category>

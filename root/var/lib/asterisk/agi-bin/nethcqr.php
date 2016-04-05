@@ -243,8 +243,10 @@ function nethcqr_goto($cqr_query_results)
 	{
 	    if ($cqr_query_result == $entrie['condition']) 
 	    {//WIN
-                nethcqr_debug("$cqr_query_result == ".$entrie['condition']." -> ".$entrie['destination']);
+                nethcqr_debug("'$cqr_query_result' == '".$entrie['condition']."' -> '".$entrie['destination']."'");
                 nethcqr_goto_destination($entrie['destination']);
+            } else {
+                nethcqr_debug("'$cqr_query_result' != '".$entrie['condition']."' -> '".$entrie['destination']."'");
             }
 	}
     }

@@ -56,6 +56,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}-%{version}-filelist
 %defattr(-,asterisk,asterisk)
+%dir %{_nseventsdir}/nethvoice-module-nethcqr-update
 
 %changelog
 * Wed Dec 16 2015 Stefano Fancello <stefano.fancello@nethesis.it> - 1.0.4-1

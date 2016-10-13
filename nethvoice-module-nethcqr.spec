@@ -52,8 +52,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}-%{version}-%{release}-filelist
 %defattr(-,asterisk,asterisk)
-%dir %attr(0775,asterisk,asterisk) /var/lib/asterisk/agi-bin
-%dir %attr(0755,asterisk,asterisk) /var/lib/asterisk
 %dir %{_nseventsdir}/nethvoice-module-nethcqr-update
 
 %changelog

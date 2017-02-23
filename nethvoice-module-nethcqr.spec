@@ -10,7 +10,6 @@ BuildArch:	noarch
 BuildRequires: nethserver-devtools
 BuildRequires: gettext
 Requires: nethserver-nethvoice
-Requires: nethserver-nethvoice-enterprise
 
 
 %description

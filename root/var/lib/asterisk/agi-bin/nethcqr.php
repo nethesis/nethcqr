@@ -51,7 +51,7 @@ if (!isset($cqr['use_code']) || $cqr['use_code'] == 0)
     if (isset($variables['CID']) && $variables['CID'] != '' && $variables['CID'] != 0 )
     {
         //make destination query using only CID
-        nethcqr_debug("breakpoint 1 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
+        nethcqr_debug("breakpoint 1 CQR id: $id_cqr, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: not yet definded" );
         $handler = nethcqr_db_connect($cqr['db_type'],$cqr['db_name'],$cqr['db_user'],$cqr['db_pass'],$cqr['db_url']);
         nethcqr_debug (var_dump($cqr['query']));
         $query = nethcqr_evaluate($cqr['query'],$variables);
@@ -62,7 +62,7 @@ if (!isset($cqr['use_code']) || $cqr['use_code'] == 0)
     }
     else
     {
-        nethcqr_debug("breakpoint 2 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
+        nethcqr_debug("breakpoint 2 CQR id: $id_cqr, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: not yet definded" );
         nethcqr_goto_destination($cqr['default_destination']);
     }
 } 
@@ -102,7 +102,7 @@ else
     if (isset($variables['CUSTOMERCODE']) && $variables['CUSTOMERCODE'] != 0 && $variables['CUSTOMERCODE'] != '')
     {
         //make destination query using CUSTOMERCODE
-	nethcqr_debug("breakpoint 3 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
+	nethcqr_debug("breakpoint 3 CQR id: $id_cqr, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
 	$handler = nethcqr_db_connect($cqr['db_type'],$cqr['db_name'],$cqr['db_user'],$cqr['db_pass'],$cqr['db_url']);
 	$query = nethcqr_evaluate($cqr['query'],$variables);
 	nethcqr_debug ($query);
@@ -177,7 +177,7 @@ else
 	 	    {
 		        //Manual inserted customer code is correct
                         $variables['CUSTOMERCODE']=$codcli;
-		        nethcqr_debug("breakpoint 4 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
+		        nethcqr_debug("breakpoint 4 CQR id: $id_cqr, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
                         $handler = nethcqr_db_connect($cqr['db_type'],$cqr['db_name'],$cqr['db_user'],$cqr['db_pass'],$cqr['db_url']);
                         $query = nethcqr_evaluate($cqr['query'],$variables);
                         nethcqr_debug ($query);
@@ -189,7 +189,7 @@ else
 		else
 		{
 		    //Don't check manual customer code. It's correct 
-		    nethcqr_debug("breakpoint 5 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
+		    nethcqr_debug("breakpoint 5 CQR id: $id_cqr, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
                     $handler = nethcqr_db_connect($cqr['db_type'],$cqr['db_name'],$cqr['db_user'],$cqr['db_pass'],$cqr['db_url']);
                     $query = nethcqr_evaluate($cqr['query'],$variables);
                     nethcqr_debug ($query);
@@ -200,13 +200,13 @@ else
                 $try++;
             }
 	    //manually provided customer code was always wrong, goto default destination
-	    nethcqr_debug("breakpoint 6 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
+	    nethcqr_debug("breakpoint 6 CQR id: $id_cqr, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
             nethcqr_goto_destination($cqr['default_destination']);
 	} 
 	else 
 	{
 	    //got default destination
-	    nethcqr_debug("breakpoint 7 CQR id: $cqr_id, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
+	    nethcqr_debug("breakpoint 7 CQR id: $id_cqr, use_code: ".$cqr['use_code'].", CID: ".$variables['CID'].", customercode: ".$variables['CUSTOMERCODE']."" );
             nethcqr_goto_destination($cqr['default_destination']);
 	}
     }

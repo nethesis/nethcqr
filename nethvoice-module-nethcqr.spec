@@ -1,5 +1,5 @@
 Name:		nethvoice-module-nethcqr
-Version: 1.1.0
+Version: 1.1.1
 Release: 1%{?dist}
 Summary:	NethCQR module for Nethvoice
 Group:		Networking/Daemons
@@ -54,6 +54,10 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_nseventsdir}/nethvoice-module-nethcqr-update
 
 %changelog
+* Fri Apr 07 2017 Stefano Fancello <stefano.fancello@nethesis.it> - 1.1.1-1
+- Fix warning: Nethesis/dev#5104
+- Removed nethserver-nethvoice-enterprise Requires. Nethesis/dev#5073
+
 * Tue Oct 18 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.0-1
 - First NS 7 release
 

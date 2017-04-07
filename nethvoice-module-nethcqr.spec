@@ -1,5 +1,5 @@
 Name:		nethvoice-module-nethcqr
-Version: 1.0.4
+Version: 1.0.5
 Release: 1%{?dist}
 Summary:	NethCQR module for Nethvoice
 Group:		Networking/Daemons	
@@ -59,6 +59,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,asterisk,asterisk)
 
 %changelog
+* Fri Apr 07 2017 Stefano Fancello <stefano.fancello@nethesis.it> - 1.0.5-1
+- Fix warning: Nethesis/dev#5104
+- better debug
+
 * Wed Dec 16 2015 Stefano Fancello <stefano.fancello@nethesis.it> - 1.0.4-1
 - Fix destination description to avoid freepbx dashbord notices. Refs #3921
 

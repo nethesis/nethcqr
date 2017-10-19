@@ -1,9 +1,0 @@
-#!/usr/bin/perl -w
-
-use esmith::Build::CreateLinks qw(:all);
-
-my $event = 'nethvoice-module-nethcqr-update';
-
-event_link ("nethvoice-module-nethcqr-install", $event ,'90');
-templates2events ("/etc/asterisk/freepbx_menu.conf",$event);
-

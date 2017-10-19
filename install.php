@@ -1,4 +1,15 @@
-CREATE TABLE IF NOT EXISTS `nethcqr_details` (
+<?php
+global $db;
+
+$check = $db->getRow('SELECT `use_workphone` from `nethcqr_details` ');
+if(DB::IsError($check)) {
+    $check = $db->getAll('DESCRIBE nethcqr_details',DB_FETCHMODE_ASSOC);
+    if(!DB::IsError($check)){
+        $db->query('ALTER TABLE `nethcqr_details` ADD COLUMN `use_workphone` BOOLEAN default TRUE AFTER manual_code');
+    }
+}
+
+$sqls[] = "CREATE TABLE IF NOT EXISTS `nethcqr_details` (
   `id_cqr` int(11) NOT NULL auto_increment,
   `name` varchar(60) NOT NULL UNIQUE,
   `description` varchar(120) default NULL,
@@ -25,16 +36,19 @@ CREATE TABLE IF NOT EXISTS `nethcqr_details` (
   `ccc_query` varchar(8000) default NULL,
   `default_destination` varchar(50) default NULL,
   PRIMARY KEY  (`id_cqr`)
-);
-
-CREATE TABLE IF NOT EXISTS `nethcqr_entries` (
+)";
+$sqls[] = "CREATE TABLE IF NOT EXISTS `nethcqr_entries` (
   `id_dest` int(11) NOT NULL auto_increment,
   `id_cqr` int(11) NOT NULL,
   `position` int(11),
   `condition` varchar(8000) default NULL,
   `destination` varchar(50) default NULL,
   PRIMARY KEY  (`id_dest`)
-);
+)";
 
-
-
+foreach ($sqls as $sql) {
+    $res = $db->query($sql);
+    if(DB::IsError($res)){
+        error_log('FAIL creating CQR DB tables');
+    }
+}

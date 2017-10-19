@@ -4,18 +4,15 @@
 include_once ("/etc/freepbx.conf");
 
 define("AGIBIN_DIR", "/var/lib/asterisk/agi-bin");
-define("AMPORTAL_CONF", "/etc/amportal.conf");
 define("DEBUG", "FALSE");
 include(AGIBIN_DIR."/phpagi.php");
 
 require_once('DB.php');
+
 global $db;
 global $amp_conf;
 
 $agi = new AGI();
-
-##DEBUG# REMOVE BEFORE DEPLOY##       
-#nethcqr_debug($amp_conf);
 
 //Get cqr id, passed as an argument and check that it isn't empty
 global $id_cqr;

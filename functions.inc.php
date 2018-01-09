@@ -300,7 +300,7 @@ function nethcqr_configpageload(){
 
 function nethcqr_delete($id_cqr){
     global $db;
-    $id_cqr=$db->quote($id_cqr);
+    $id_cqr=$db->escapeSimple($id_cqr);
     $sql = "DELETE FROM `nethcqr_details` WHERE `id_cqr`=".$id_cqr;
     $results =& $db->query($sql);
     if (DB::isError($results)) {
@@ -318,7 +318,7 @@ return true;
 
 function nethcqr_get_details($id_cqr=''){
     global $db;
-    $id_cqr = $db->quote($id_cqr);
+    $id_cqr = $db->escapeSimple($id_cqr);
     $sql = "SELECT * FROM `nethcqr_details`";
     if ($id_cqr) $sql .=" WHERE `id_cqr` = $id_cqr";
     $results =& $db->getAll($sql,DB_FETCHMODE_ASSOC);
@@ -435,11 +435,10 @@ function nethcqr_save_entries($id_cqr, $entries){
         sql('DELETE FROM nethcqr_entries WHERE id_cqr = "' . $id_cqr . '"');
     if ($entries)
         for ($i=0;$i < count($entries['position']); $i++){
-            $position = $db->quote($entries['position'][$i]);
-            $condition = $db->quote($entries['condition'][$i]);
-            $destination = $db->quote($entries['goto'][$i]);
-            $sql = "INSERT INTO `nethcqr_entries` SET `id_cqr`='$id_cqr', `position`='$position', `condition`='$condition', `destination`='$destination'";
-            $db->query($sql);
+	    $dbi = FreePBX::Database();
+            $sql = "INSERT INTO `nethcqr_entries` SET `id_cqr`=?, `position`=?, `condition`=?, `destination`=?";
+            $sth = $dbi->prepare($sql);
+            $sth->execute(array($id_cqr,$entries['position'][$i],$entries['condition'][$i],$entries['goto'][$i]));
         }
 return true;
 }

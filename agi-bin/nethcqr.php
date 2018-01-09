@@ -27,8 +27,6 @@ define("AGIBIN_DIR", "/var/lib/asterisk/agi-bin");
 define("DEBUG", "FALSE");
 include(AGIBIN_DIR."/phpagi.php");
 
-require_once('DB.php');
-
 global $db;
 global $amp_conf;
 

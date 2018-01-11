@@ -70,7 +70,7 @@ if (!isset($cqr['use_code']) || $cqr['use_code'] == 0)
         $handler = nethcqr_db_connect($cqr['db_type'],$cqr['db_name'],$cqr['db_user'],$cqr['db_pass'],$cqr['db_url']);
         nethcqr_debug (var_dump($cqr['query']));
         $query = nethcqr_evaluate($cqr['query'],$variables);
-        //nethcqr_debug ($query);
+        nethcqr_debug ($query);
         $query_results = nethcqr_query($query,$handler,$cqr['db_type']);
         nethcqr_debug ($query_results);
         nethcqr_goto ($query_results);    
@@ -235,8 +235,6 @@ function nethcqr_debug($text) {
         $text=print_r($text,true);
     }
     {
-##DEBUG# REMOVE BEFORE DEPLOY##       
-#	echo "$text\n";
         $agi->verbose($text);
     }
 }
@@ -273,7 +271,7 @@ function nethcqr_goto_destination($destination,$exit=0)
 {
         global $agi;
         nethcqr_debug(__FUNCTION__.": goto $destination");
-        $agi->exec_go_to($destination);
+        @$agi->exec("Goto","$destination");
         exit($exit);
 }
 

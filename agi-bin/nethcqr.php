@@ -111,7 +111,13 @@ else
         $cc_query = nethcqr_evaluate($cqr['cc_query'],$variables);
         $cqr_query_results = nethcqr_query($cc_query,$handler,$cqr['cc_db_type']);
     }
-    if (is_array($cqr_query_results)) $variables['CUSTOMERCODE'] = $cqr_query_results[0];
+    if (is_array($cqr_query_results)) {
+        if (is_array($cqr_query_results[0])) {
+             $variables['CUSTOMERCODE'] = array_pop($cqr_query_results[0]);
+	} else {
+             $variables['CUSTOMERCODE'] = $cqr_query_results[0];
+        }
+    }
     else $variables['CUSTOMERCODE'] = $cqr_query_results;
 
     if (isset($variables['CUSTOMERCODE']) && $variables['CUSTOMERCODE'] != 0 && $variables['CUSTOMERCODE'] != '')
